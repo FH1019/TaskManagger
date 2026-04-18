@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useTasks, usePeople } from '@/hooks/use-tasks'
-import type { Task, TaskCategory, TaskStatus } from '@/lib/types'
+import type { Task, TaskCategory, TaskStatus, RecurrenceType } from '@/lib/types'
 import {
   Dialog,
   DialogContent,
@@ -22,8 +22,6 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Star } from 'lucide-react'
-import { cn } from '@/lib/utils'
 
 interface TaskDialogProps {
   open: boolean
@@ -50,7 +48,7 @@ export function TaskDialog({
     is_important: false,
     is_urgent: false,
     status: 'pending' as TaskStatus,
-    rating: null as number | null,
+    recurrence: 'none' as RecurrenceType,
     due_date: '',
     assignee_id: null as string | null,
     is_personal: true,
@@ -65,7 +63,7 @@ export function TaskDialog({
         is_important: task.is_important,
         is_urgent: task.is_urgent,
         status: task.status,
-        rating: task.rating,
+        recurrence: task.recurrence ?? 'none',
         due_date: task.due_date ? task.due_date.slice(0, 16) : '',
         assignee_id: task.assignee_id,
         is_personal: task.is_personal,
@@ -78,7 +76,7 @@ export function TaskDialog({
         is_important: false,
         is_urgent: false,
         status: 'pending',
-        rating: null,
+        recurrence: 'none',
         due_date: '',
         assignee_id: null,
         is_personal: true,
@@ -109,13 +107,6 @@ export function TaskDialog({
     } finally {
       setIsSubmitting(false)
     }
-  }
-
-  const handleRatingClick = (value: number) => {
-    setFormData((prev) => ({
-      ...prev,
-      rating: prev.rating === value ? null : value,
-    }))
   }
 
   return (
@@ -235,6 +226,26 @@ export function TaskDialog({
             </div>
           </div>
 
+          <div className="space-y-2">
+            <Label htmlFor="recurrence">Repetición</Label>
+            <Select
+              value={formData.recurrence}
+              onValueChange={(value: RecurrenceType) =>
+                setFormData({ ...formData, recurrence: value })
+              }
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="none">Sin repetición</SelectItem>
+                <SelectItem value="daily">Diaria</SelectItem>
+                <SelectItem value="weekly">Semanal</SelectItem>
+                <SelectItem value="monthly">Mensual</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2">
               <Checkbox
@@ -260,34 +271,6 @@ export function TaskDialog({
               <Label htmlFor="is_urgent" className="cursor-pointer">
                 Urgente
               </Label>
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label>Calificación</Label>
-            <div className="flex items-center gap-1">
-              {[1, 2, 3, 4, 5].map((value) => (
-                <button
-                  key={value}
-                  type="button"
-                  onClick={() => handleRatingClick(value)}
-                  className="p-1"
-                >
-                  <Star
-                    className={cn(
-                      'h-6 w-6 transition-colors',
-                      formData.rating && value <= formData.rating
-                        ? 'fill-yellow-500 text-yellow-500'
-                        : 'text-muted-foreground hover:text-yellow-500'
-                    )}
-                  />
-                </button>
-              ))}
-              {formData.rating && (
-                <span className="ml-2 text-sm text-muted-foreground">
-                  {formData.rating}/5
-                </span>
-              )}
             </div>
           </div>
 

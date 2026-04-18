@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { cn } from '@/lib/utils'
-import type { Task } from '@/lib/types'
+import type { Task, RecurrenceType } from '@/lib/types'
 import { useTasks } from '@/hooks/use-tasks'
 import {
   Star,
@@ -15,6 +15,7 @@ import {
   CheckCircle,
   Circle,
   User,
+  Repeat,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { TaskDialog } from '@/components/task-dialog'
@@ -40,17 +41,17 @@ export function TaskCard({ task, compact = false }: TaskCardProps) {
     }
   }
 
-  const getRatingStars = (rating: number | null) => {
-    if (!rating) return null
-    return Array.from({ length: 5 }, (_, i) => (
-      <Star
-        key={i}
-        className={cn(
-          'h-3 w-3',
-          i < rating ? 'fill-yellow-500 text-yellow-500' : 'text-muted-foreground'
-        )}
-      />
-    ))
+  const getRecurrenceLabel = (recurrence: RecurrenceType) => {
+    switch (recurrence) {
+      case 'daily':
+        return 'Diaria'
+      case 'weekly':
+        return 'Semanal'
+      case 'monthly':
+        return 'Mensual'
+      default:
+        return ''
+    }
   }
 
   if (compact) {
@@ -207,10 +208,11 @@ export function TaskCard({ task, compact = false }: TaskCardProps) {
               {task.assignee.name}
             </span>
           )}
-          {task.rating && (
-            <div className="flex items-center gap-0.5">
-              {getRatingStars(task.rating)}
-            </div>
+          {task.recurrence && task.recurrence !== 'none' && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-accent px-2 py-0.5 text-xs font-medium text-muted-foreground">
+              <Repeat className="h-3 w-3" />
+              {getRecurrenceLabel(task.recurrence)}
+            </span>
           )}
         </div>
       </div>

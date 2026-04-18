@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS public.tasks (
   is_important BOOLEAN DEFAULT FALSE,
   is_urgent BOOLEAN DEFAULT FALSE,
   status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'in_progress', 'completed', 'archived')),
-  rating INTEGER CHECK (rating >= 1 AND rating <= 5),
+  recurrence TEXT DEFAULT 'none' CHECK (recurrence IN ('none', 'daily', 'weekly', 'monthly')),
   due_date TIMESTAMPTZ,
   assignee_id UUID REFERENCES public.people(id) ON DELETE SET NULL,
   is_personal BOOLEAN DEFAULT TRUE,

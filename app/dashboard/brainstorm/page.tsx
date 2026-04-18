@@ -17,10 +17,10 @@ export default function BrainstormPage() {
 
   const brainstormTasks = tasks.filter((t) => t.category === 'brainstorm')
   const unclassifiedIdeas = brainstormTasks.filter(
-    (t) => !t.is_important && !t.is_urgent && !t.rating
+    (t) => !t.is_important && !t.is_urgent
   )
   const classifiedIdeas = brainstormTasks.filter(
-    (t) => t.is_important || t.is_urgent || t.rating
+    (t) => t.is_important || t.is_urgent
   )
 
   const handleQuickAdd = async (e: React.FormEvent) => {
@@ -35,7 +35,7 @@ export default function BrainstormPage() {
         is_important: false,
         is_urgent: false,
         status: 'pending',
-        rating: null,
+        recurrence: 'none',
         due_date: null,
         assignee_id: null,
         is_personal: true,

@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Plus, Search, ListTodo, Star, Filter } from 'lucide-react'
+import { Plus, Search, ListTodo, Filter } from 'lucide-react'
 import type { TaskStatus } from '@/lib/types'
 
 export default function TasksPage() {
@@ -22,7 +22,6 @@ export default function TasksPage() {
   const [isCreateOpen, setIsCreateOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [statusFilter, setStatusFilter] = useState<TaskStatus | 'all'>('all')
-  const [ratingFilter, setRatingFilter] = useState<string>('all')
   const [importanceFilter, setImportanceFilter] = useState<string>('all')
 
   const filteredTasks = useMemo(() => {
@@ -30,7 +29,6 @@ export default function TasksPage() {
       .filter((task) => task.category === 'task')
       .filter((task) => {
         if (statusFilter !== 'all' && task.status !== statusFilter) return false
-        if (ratingFilter !== 'all' && task.rating !== parseInt(ratingFilter)) return false
         if (importanceFilter === 'important' && !task.is_important) return false
         if (importanceFilter === 'urgent' && !task.is_urgent) return false
         if (importanceFilter === 'both' && !(task.is_important && task.is_urgent)) return false
@@ -43,7 +41,7 @@ export default function TasksPage() {
         }
         return true
       })
-  }, [tasks, statusFilter, ratingFilter, importanceFilter, searchQuery])
+  }, [tasks, statusFilter, importanceFilter, searchQuery])
 
   if (isLoading) {
     return (
@@ -75,7 +73,7 @@ export default function TasksPage() {
       </div>
 
       {/* Filters */}
-      <div className="mb-6 grid grid-cols-1 gap-3 rounded-xl border border-border bg-card p-4 sm:grid-cols-2 xl:grid-cols-5">
+      <div className="mb-6 grid grid-cols-1 gap-3 rounded-xl border border-border bg-card p-4 sm:grid-cols-2 xl:grid-cols-4">
         <div className="flex items-center gap-2">
           <Filter className="h-4 w-4 text-muted-foreground" />
           <span className="text-sm font-medium text-foreground">Filtros:</span>
@@ -104,20 +102,6 @@ export default function TasksPage() {
           </SelectContent>
         </Select>
 
-        <Select value={ratingFilter} onValueChange={setRatingFilter}>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Calificación" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Todas</SelectItem>
-            <SelectItem value="5">5 Estrellas</SelectItem>
-            <SelectItem value="4">4 Estrellas</SelectItem>
-            <SelectItem value="3">3 Estrellas</SelectItem>
-            <SelectItem value="2">2 Estrellas</SelectItem>
-            <SelectItem value="1">1 Estrella</SelectItem>
-          </SelectContent>
-        </Select>
-
         <Select value={importanceFilter} onValueChange={setImportanceFilter}>
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Prioridad" />
@@ -142,7 +126,7 @@ export default function TasksPage() {
               No se encontraron tareas
             </h3>
             <p className="mt-2 text-muted-foreground">
-              {searchQuery || statusFilter !== 'all' || ratingFilter !== 'all'
+              {searchQuery || statusFilter !== 'all'
                 ? 'Intenta ajustar los filtros de búsqueda'
                 : 'Crea tu primera tarea para comenzar'}
             </p>

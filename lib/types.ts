@@ -27,7 +27,7 @@ export interface Task {
   is_important: boolean
   is_urgent: boolean
   status: TaskStatus
-  rating: number | null
+  recurrence: RecurrenceType
   due_date: string | null
   assignee_id: string | null
   is_personal: boolean

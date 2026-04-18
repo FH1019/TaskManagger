@@ -95,10 +95,6 @@ export function useTasks() {
     return data?.filter(task => task.status === status) || []
   }
 
-  const filterByRating = (rating: number) => {
-    return data?.filter(task => task.rating === rating) || []
-  }
-
   const searchTasks = (query: string) => {
     const lowerQuery = query.toLowerCase()
     return data?.filter(task => 
@@ -125,7 +121,6 @@ export function useTasks() {
     deleteTask,
     filterByCategory,
     filterByStatus,
-    filterByRating,
     searchTasks,
     getEisenhowerTasks,
     mutate,
