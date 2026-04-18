@@ -83,8 +83,8 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="p-6">
-      <div className="mb-8 flex items-center justify-between">
+    <div className="p-4 sm:p-6">
+      <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
           <p className="text-muted-foreground">
@@ -92,17 +92,17 @@ export default function DashboardPage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-4">
-          <div className="relative">
+        <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center lg:w-auto">
+          <div className="relative w-full sm:w-64">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               placeholder="Buscar tareas..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-64 pl-9"
+              className="w-full pl-9"
             />
           </div>
-          <Button onClick={() => setIsCreateOpen(true)}>
+          <Button className="w-full sm:w-auto" onClick={() => setIsCreateOpen(true)}>
             <Plus className="mr-2 h-4 w-4" />
             Nueva Tarea
           </Button>
@@ -110,7 +110,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Stats Grid */}
-      <div className="mb-8 grid grid-cols-4 gap-4">
+      <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {stats.map((stat) => (
           <div
             key={stat.label}
@@ -129,10 +129,10 @@ export default function DashboardPage() {
         ))}
       </div>
 
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
         {/* Recent Tasks */}
-        <div className="col-span-2 rounded-xl border border-border bg-card p-5">
-          <div className="mb-4 flex items-center justify-between">
+        <div className="rounded-xl border border-border bg-card p-5 xl:col-span-2">
+          <div className="mb-4 flex items-center justify-between gap-2">
             <h2 className="text-lg font-semibold text-foreground">
               Tareas Recientes
             </h2>

@@ -54,8 +54,8 @@ export default function TasksPage() {
   }
 
   return (
-    <div className="p-6">
-      <div className="mb-8 flex items-center justify-between">
+    <div className="p-4 sm:p-6">
+      <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex items-center gap-3">
           <div className="rounded-xl bg-blue-500/10 p-3">
             <ListTodo className="h-6 w-6 text-blue-500" />
@@ -68,20 +68,20 @@ export default function TasksPage() {
           </div>
         </div>
 
-        <Button onClick={() => setIsCreateOpen(true)}>
+        <Button className="w-full sm:w-auto" onClick={() => setIsCreateOpen(true)}>
           <Plus className="mr-2 h-4 w-4" />
           Nueva Tarea
         </Button>
       </div>
 
       {/* Filters */}
-      <div className="mb-6 flex flex-wrap items-center gap-4 rounded-xl border border-border bg-card p-4">
+      <div className="mb-6 grid grid-cols-1 gap-3 rounded-xl border border-border bg-card p-4 sm:grid-cols-2 xl:grid-cols-5">
         <div className="flex items-center gap-2">
           <Filter className="h-4 w-4 text-muted-foreground" />
           <span className="text-sm font-medium text-foreground">Filtros:</span>
         </div>
 
-        <div className="relative flex-1 min-w-[200px]">
+        <div className="relative sm:col-span-2 xl:col-span-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             placeholder="Buscar tareas..."
@@ -92,7 +92,7 @@ export default function TasksPage() {
         </div>
 
         <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as TaskStatus | 'all')}>
-          <SelectTrigger className="w-40">
+          <SelectTrigger className="w-full">
             <SelectValue placeholder="Estado" />
           </SelectTrigger>
           <SelectContent>
@@ -105,7 +105,7 @@ export default function TasksPage() {
         </Select>
 
         <Select value={ratingFilter} onValueChange={setRatingFilter}>
-          <SelectTrigger className="w-40">
+          <SelectTrigger className="w-full">
             <SelectValue placeholder="Calificación" />
           </SelectTrigger>
           <SelectContent>
@@ -119,7 +119,7 @@ export default function TasksPage() {
         </Select>
 
         <Select value={importanceFilter} onValueChange={setImportanceFilter}>
-          <SelectTrigger className="w-44">
+          <SelectTrigger className="w-full">
             <SelectValue placeholder="Prioridad" />
           </SelectTrigger>
           <SelectContent>
@@ -132,11 +132,11 @@ export default function TasksPage() {
       </div>
 
       {/* Task List */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
         {filteredTasks.length > 0 ? (
           filteredTasks.map((task) => <TaskCard key={task.id} task={task} />)
         ) : (
-          <div className="col-span-2 py-16 text-center">
+          <div className="py-16 text-center xl:col-span-2">
             <ListTodo className="mx-auto h-16 w-16 text-muted-foreground/50" />
             <h3 className="mt-4 text-lg font-medium text-foreground">
               No se encontraron tareas
