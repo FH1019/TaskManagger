@@ -71,7 +71,7 @@ export default function PeoplePage() {
   }
 
   const handleDelete = async (id: string) => {
-    if (confirm('¿Estás seguro de eliminar esta persona? Las tareas asignadas quedarán sin asignar.')) {
+    if (confirm('¿Estás seguro de eliminar esta persona?')) {
       await deletePerson(id)
     }
   }
@@ -85,54 +85,55 @@ export default function PeoplePage() {
   }
 
   return (
-    <div className="p-6">
-      <div className="mb-8 flex items-center justify-between">
+    <div className="p-4 md:p-6">
+      {/* Header */}
+      <div className="mb-6 flex flex-col gap-4 md:mb-8 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-3">
-          <div className="rounded-xl bg-primary/10 p-3">
-            <Users className="h-6 w-6 text-primary" />
+          <div className="rounded-xl bg-primary/10 p-2 md:p-3">
+            <Users className="h-5 w-5 text-primary md:h-6 md:w-6" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-foreground">Personas</h1>
-            <p className="text-muted-foreground">
-              Administra las personas a las que puedes asignar tareas
+            <h1 className="text-xl font-bold text-foreground md:text-2xl">Personas</h1>
+            <p className="text-sm text-muted-foreground">
+              Administra las personas para asignar tareas
             </p>
           </div>
         </div>
 
-        <Button onClick={handleOpenCreate}>
+        <Button onClick={handleOpenCreate} className="w-full md:w-auto">
           <Plus className="mr-2 h-4 w-4" />
           Agregar Persona
         </Button>
       </div>
 
       {/* People Grid */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {people.length > 0 ? (
           people.map((person) => (
             <div
               key={person.id}
-              className="group relative rounded-xl border border-border bg-card p-5"
+              className="group relative rounded-xl border border-border bg-card p-4 md:p-5"
             >
               <button
                 onClick={() => handleDelete(person.id)}
-                className="absolute right-3 top-3 rounded-lg p-1 text-destructive opacity-0 transition-opacity hover:bg-destructive/10 group-hover:opacity-100"
+                className="absolute right-3 top-3 rounded-lg p-1.5 text-destructive opacity-100 transition-opacity hover:bg-destructive/10 sm:opacity-0 sm:group-hover:opacity-100"
               >
                 <Trash2 className="h-4 w-4" />
               </button>
 
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3 md:gap-4">
                 <div
-                  className="flex h-12 w-12 items-center justify-center rounded-full text-lg font-semibold text-white"
+                  className="flex h-10 w-10 items-center justify-center rounded-full text-base font-semibold text-white md:h-12 md:w-12 md:text-lg"
                   style={{ backgroundColor: person.color }}
                 >
                   {person.name.charAt(0).toUpperCase()}
                 </div>
-                <div>
-                  <h3 className="font-medium text-foreground">{person.name}</h3>
+                <div className="flex-1 min-w-0">
+                  <h3 className="truncate font-medium text-foreground">{person.name}</h3>
                   {person.email && (
-                    <p className="flex items-center gap-1 text-sm text-muted-foreground">
-                      <Mail className="h-3 w-3" />
-                      {person.email}
+                    <p className="flex items-center gap-1 truncate text-xs text-muted-foreground md:text-sm">
+                      <Mail className="h-3 w-3 flex-shrink-0" />
+                      <span className="truncate">{person.email}</span>
                     </p>
                   )}
                 </div>
@@ -140,13 +141,13 @@ export default function PeoplePage() {
             </div>
           ))
         ) : (
-          <div className="col-span-3 py-16 text-center">
-            <Users className="mx-auto h-16 w-16 text-muted-foreground/50" />
-            <h3 className="mt-4 text-lg font-medium text-foreground">
+          <div className="col-span-full py-12 text-center md:py-16">
+            <Users className="mx-auto h-12 w-12 text-muted-foreground/50 md:h-16 md:w-16" />
+            <h3 className="mt-4 text-base font-medium text-foreground md:text-lg">
               Sin personas registradas
             </h3>
-            <p className="mt-2 text-muted-foreground">
-              Agrega personas para poder asignarles tareas
+            <p className="mt-2 text-sm text-muted-foreground">
+              Agrega personas para asignarles tareas
             </p>
             <Button className="mt-4" onClick={handleOpenCreate}>
               <Plus className="mr-2 h-4 w-4" />
@@ -158,7 +159,7 @@ export default function PeoplePage() {
 
       {/* Create Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent>
+        <DialogContent className="max-w-[95vw] sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Agregar Persona</DialogTitle>
           </DialogHeader>
@@ -215,15 +216,16 @@ export default function PeoplePage() {
               </div>
             </div>
 
-            <DialogFooter>
+            <DialogFooter className="flex-col gap-2 sm:flex-row">
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => setIsDialogOpen(false)}
+                className="w-full sm:w-auto"
               >
                 Cancelar
               </Button>
-              <Button type="submit" disabled={isSubmitting}>
+              <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
                 {isSubmitting ? 'Agregando...' : 'Agregar Persona'}
               </Button>
             </DialogFooter>

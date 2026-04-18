@@ -119,23 +119,24 @@ export default function RemindersPage() {
   }
 
   return (
-    <div className="p-6">
-      <div className="mb-8 flex items-center justify-between">
+    <div className="p-4 md:p-6">
+      {/* Header */}
+      <div className="mb-6 flex flex-col gap-4 md:mb-8 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-3">
-          <div className="rounded-xl bg-yellow-500/10 p-3">
-            <Bell className="h-6 w-6 text-yellow-500" />
+          <div className="rounded-xl bg-yellow-500/10 p-2 md:p-3">
+            <Bell className="h-5 w-5 text-yellow-500 md:h-6 md:w-6" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-foreground">Recordatorios</h1>
-            <p className="text-muted-foreground">
+            <h1 className="text-xl font-bold text-foreground md:text-2xl">Recordatorios</h1>
+            <p className="text-sm text-muted-foreground">
               No olvides ninguna fecha importante
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
           <Select value={filter} onValueChange={(v: 'all' | 'pending' | 'completed') => setFilter(v)}>
-            <SelectTrigger className="w-40">
+            <SelectTrigger className="w-full sm:w-40">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -145,7 +146,7 @@ export default function RemindersPage() {
             </SelectContent>
           </Select>
 
-          <Button onClick={handleOpenCreate}>
+          <Button onClick={handleOpenCreate} className="w-full sm:w-auto">
             <Plus className="mr-2 h-4 w-4" />
             Nuevo Recordatorio
           </Button>
@@ -153,7 +154,7 @@ export default function RemindersPage() {
       </div>
 
       {/* Reminders List */}
-      <div className="grid gap-4">
+      <div className="grid gap-3 md:gap-4">
         {filteredReminders.length > 0 ? (
           filteredReminders.map((reminder) => {
             const isOverdue = isPast(new Date(reminder.reminder_date)) && !reminder.is_completed
@@ -163,40 +164,41 @@ export default function RemindersPage() {
               <div
                 key={reminder.id}
                 className={cn(
-                  'group flex items-center justify-between rounded-xl border border-border bg-card p-5',
+                  'group flex flex-col gap-3 rounded-xl border border-border bg-card p-4 sm:flex-row sm:items-center sm:justify-between md:p-5',
                   reminder.is_completed && 'opacity-60',
                   isOverdue && 'border-red-500/50'
                 )}
               >
-                <div className="flex items-center gap-4">
+                <div className="flex items-start gap-3 sm:items-center sm:gap-4">
                   <Checkbox
                     checked={reminder.is_completed}
                     onCheckedChange={() =>
                       handleToggleComplete(reminder.id, reminder.is_completed)
                     }
+                    className="mt-1 sm:mt-0"
                   />
                   <div className={cn(
-                    'rounded-lg p-3',
+                    'hidden rounded-lg p-2 sm:block md:p-3',
                     isOverdue ? 'bg-red-500/10' : reminder.is_completed ? 'bg-green-500/10' : 'bg-yellow-500/10'
                   )}>
                     {reminder.is_completed ? (
-                      <CheckCircle className="h-5 w-5 text-green-500" />
+                      <CheckCircle className="h-4 w-4 text-green-500 md:h-5 md:w-5" />
                     ) : isOverdue ? (
-                      <Bell className="h-5 w-5 text-red-500" />
+                      <Bell className="h-4 w-4 text-red-500 md:h-5 md:w-5" />
                     ) : (
-                      <Clock className="h-5 w-5 text-yellow-500" />
+                      <Clock className="h-4 w-4 text-yellow-500 md:h-5 md:w-5" />
                     )}
                   </div>
-                  <div>
+                  <div className="flex-1">
                     <h3
                       className={cn(
-                        'font-medium text-foreground',
+                        'text-sm font-medium text-foreground md:text-base',
                         reminder.is_completed && 'line-through'
                       )}
                     >
                       {reminder.title}
                     </h3>
-                    <div className="mt-1 flex items-center gap-4 text-sm text-muted-foreground">
+                    <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-muted-foreground md:gap-4 md:text-sm">
                       <span className={cn(isOverdue && 'text-red-500')}>
                         {format(new Date(reminder.reminder_date), "d MMM yyyy, HH:mm", {
                           locale: es,
@@ -212,19 +214,15 @@ export default function RemindersPage() {
                           Próximo
                         </span>
                       )}
-                      {reminder.task && (
-                        <span className="text-xs text-primary">
-                          Tarea: {reminder.task.title}
-                        </span>
-                      )}
                     </div>
                   </div>
                 </div>
 
-                <div className="flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
+                <div className="flex justify-end gap-2 sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100">
                   <Button
                     variant="ghost"
                     size="icon"
+                    className="h-8 w-8"
                     onClick={() => handleOpenEdit(reminder)}
                   >
                     <Edit className="h-4 w-4" />
@@ -232,7 +230,7 @@ export default function RemindersPage() {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="text-destructive"
+                    className="h-8 w-8 text-destructive"
                     onClick={() => handleDelete(reminder.id)}
                   >
                     <Trash2 className="h-4 w-4" />
@@ -242,13 +240,13 @@ export default function RemindersPage() {
             )
           })
         ) : (
-          <div className="py-16 text-center">
-            <Bell className="mx-auto h-16 w-16 text-muted-foreground/50" />
-            <h3 className="mt-4 text-lg font-medium text-foreground">
+          <div className="py-12 text-center md:py-16">
+            <Bell className="mx-auto h-12 w-12 text-muted-foreground/50 md:h-16 md:w-16" />
+            <h3 className="mt-4 text-base font-medium text-foreground md:text-lg">
               Sin recordatorios
             </h3>
-            <p className="mt-2 text-muted-foreground">
-              Crea tu primer recordatorio para no olvidar fechas importantes
+            <p className="mt-2 text-sm text-muted-foreground">
+              Crea tu primer recordatorio
             </p>
             <Button className="mt-4" onClick={handleOpenCreate}>
               <Plus className="mr-2 h-4 w-4" />
@@ -260,7 +258,7 @@ export default function RemindersPage() {
 
       {/* Create/Edit Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent>
+        <DialogContent className="max-w-[95vw] sm:max-w-lg">
           <DialogHeader>
             <DialogTitle>
               {editingReminder ? 'Editar Recordatorio' : 'Nuevo Recordatorio'}
@@ -319,15 +317,16 @@ export default function RemindersPage() {
               </Select>
             </div>
 
-            <DialogFooter>
+            <DialogFooter className="flex-col gap-2 sm:flex-row">
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => setIsDialogOpen(false)}
+                className="w-full sm:w-auto"
               >
                 Cancelar
               </Button>
-              <Button type="submit" disabled={isSubmitting}>
+              <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
                 {isSubmitting
                   ? 'Guardando...'
                   : editingReminder

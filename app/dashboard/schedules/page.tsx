@@ -124,41 +124,42 @@ export default function SchedulesPage() {
   }
 
   return (
-    <div className="p-6">
-      <div className="mb-8 flex items-center justify-between">
+    <div className="p-4 md:p-6">
+      {/* Header */}
+      <div className="mb-6 flex flex-col gap-4 md:mb-8 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-3">
-          <div className="rounded-xl bg-green-500/10 p-3">
-            <Clock className="h-6 w-6 text-green-500" />
+          <div className="rounded-xl bg-green-500/10 p-2 md:p-3">
+            <Clock className="h-5 w-5 text-green-500 md:h-6 md:w-6" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-foreground">Cronogramas</h1>
-            <p className="text-muted-foreground">
-              Programa actividades con horarios específicos
+            <h1 className="text-xl font-bold text-foreground md:text-2xl">Cronogramas</h1>
+            <p className="text-sm text-muted-foreground">
+              Programa actividades con horarios
             </p>
           </div>
         </div>
 
-        <Button onClick={handleOpenCreate}>
+        <Button onClick={handleOpenCreate} className="w-full md:w-auto">
           <Plus className="mr-2 h-4 w-4" />
           Nuevo Cronograma
         </Button>
       </div>
 
       {/* Schedules List */}
-      <div className="grid gap-4">
+      <div className="grid gap-3 md:gap-4">
         {schedules.length > 0 ? (
           schedules.map((schedule) => (
             <div
               key={schedule.id}
-              className="group flex items-center justify-between rounded-xl border border-border bg-card p-5"
+              className="group flex flex-col gap-3 rounded-xl border border-border bg-card p-4 sm:flex-row sm:items-center sm:justify-between md:p-5"
             >
-              <div className="flex items-start gap-4">
-                <div className="rounded-lg bg-green-500/10 p-3">
-                  <Calendar className="h-5 w-5 text-green-500" />
+              <div className="flex items-start gap-3 sm:items-center sm:gap-4">
+                <div className="rounded-lg bg-green-500/10 p-2 md:p-3">
+                  <Calendar className="h-4 w-4 text-green-500 md:h-5 md:w-5" />
                 </div>
-                <div>
-                  <h3 className="font-medium text-foreground">{schedule.title}</h3>
-                  <div className="mt-1 flex items-center gap-4 text-sm text-muted-foreground">
+                <div className="flex-1">
+                  <h3 className="text-sm font-medium text-foreground md:text-base">{schedule.title}</h3>
+                  <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-muted-foreground md:gap-4 md:text-sm">
                     <span>
                       {format(new Date(schedule.start_time), "d MMM yyyy, HH:mm", {
                         locale: es,
@@ -172,19 +173,15 @@ export default function SchedulesPage() {
                         {getRecurrenceLabel(schedule.recurrence)}
                       </span>
                     )}
-                    {schedule.task && (
-                      <span className="text-xs text-primary">
-                        Vinculado a: {schedule.task.title}
-                      </span>
-                    )}
                   </div>
                 </div>
               </div>
 
-              <div className="flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
+              <div className="flex justify-end gap-2 sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100">
                 <Button
                   variant="ghost"
                   size="icon"
+                  className="h-8 w-8"
                   onClick={() => handleOpenEdit(schedule)}
                 >
                   <Edit className="h-4 w-4" />
@@ -192,7 +189,7 @@ export default function SchedulesPage() {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="text-destructive"
+                  className="h-8 w-8 text-destructive"
                   onClick={() => handleDelete(schedule.id)}
                 >
                   <Trash2 className="h-4 w-4" />
@@ -201,13 +198,13 @@ export default function SchedulesPage() {
             </div>
           ))
         ) : (
-          <div className="py-16 text-center">
-            <Clock className="mx-auto h-16 w-16 text-muted-foreground/50" />
-            <h3 className="mt-4 text-lg font-medium text-foreground">
+          <div className="py-12 text-center md:py-16">
+            <Clock className="mx-auto h-12 w-12 text-muted-foreground/50 md:h-16 md:w-16" />
+            <h3 className="mt-4 text-base font-medium text-foreground md:text-lg">
               Sin cronogramas
             </h3>
-            <p className="mt-2 text-muted-foreground">
-              Crea tu primer cronograma para programar actividades
+            <p className="mt-2 text-sm text-muted-foreground">
+              Crea tu primer cronograma
             </p>
             <Button className="mt-4" onClick={handleOpenCreate}>
               <Plus className="mr-2 h-4 w-4" />
@@ -219,7 +216,7 @@ export default function SchedulesPage() {
 
       {/* Create/Edit Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent>
+        <DialogContent className="max-w-[95vw] sm:max-w-lg">
           <DialogHeader>
             <DialogTitle>
               {editingSchedule ? 'Editar Cronograma' : 'Nuevo Cronograma'}
@@ -240,7 +237,7 @@ export default function SchedulesPage() {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="start_time">Inicio</Label>
                 <Input
@@ -313,15 +310,16 @@ export default function SchedulesPage() {
               </Select>
             </div>
 
-            <DialogFooter>
+            <DialogFooter className="flex-col gap-2 sm:flex-row">
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => setIsDialogOpen(false)}
+                className="w-full sm:w-auto"
               >
                 Cancelar
               </Button>
-              <Button type="submit" disabled={isSubmitting}>
+              <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
                 {isSubmitting
                   ? 'Guardando...'
                   : editingSchedule

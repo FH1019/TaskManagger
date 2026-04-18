@@ -62,59 +62,60 @@ export default function BrainstormPage() {
   }
 
   return (
-    <div className="p-6">
-      <div className="mb-8">
+    <div className="p-4 md:p-6">
+      {/* Header */}
+      <div className="mb-6 md:mb-8">
         <div className="flex items-center gap-3">
-          <div className="rounded-xl bg-yellow-500/10 p-3">
-            <Lightbulb className="h-6 w-6 text-yellow-500" />
+          <div className="rounded-xl bg-yellow-500/10 p-2 md:p-3">
+            <Lightbulb className="h-5 w-5 text-yellow-500 md:h-6 md:w-6" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-foreground">Brainstorming</h1>
-            <p className="text-muted-foreground">
-              Captura tus ideas rápidamente y clasifícalas después
+            <h1 className="text-xl font-bold text-foreground md:text-2xl">Brainstorming</h1>
+            <p className="text-sm text-muted-foreground">
+              Captura tus ideas rápidamente
             </p>
           </div>
         </div>
       </div>
 
       {/* Quick Add */}
-      <div className="mb-8 rounded-xl border border-border bg-card p-6">
-        <div className="flex items-center gap-2 mb-4">
-          <Sparkles className="h-5 w-5 text-yellow-500" />
-          <h2 className="text-lg font-semibold text-foreground">
+      <div className="mb-6 rounded-xl border border-border bg-card p-4 md:mb-8 md:p-6">
+        <div className="mb-3 flex items-center gap-2 md:mb-4">
+          <Sparkles className="h-4 w-4 text-yellow-500 md:h-5 md:w-5" />
+          <h2 className="text-base font-semibold text-foreground md:text-lg">
             Captura Rápida
           </h2>
         </div>
-        <form onSubmit={handleQuickAdd} className="flex gap-3">
+        <form onSubmit={handleQuickAdd} className="flex flex-col gap-3 sm:flex-row">
           <Input
             value={quickIdea}
             onChange={(e) => setQuickIdea(e.target.value)}
             placeholder="Escribe una nueva idea..."
             className="flex-1"
           />
-          <Button type="submit" disabled={isAdding || !quickIdea.trim()}>
+          <Button type="submit" disabled={isAdding || !quickIdea.trim()} className="w-full sm:w-auto">
             <Plus className="mr-2 h-4 w-4" />
-            {isAdding ? 'Agregando...' : 'Agregar Idea'}
+            {isAdding ? 'Agregando...' : 'Agregar'}
           </Button>
         </form>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Presiona Enter para agregar rápidamente. Puedes clasificar la idea después.
+        <p className="mt-2 text-xs text-muted-foreground md:text-sm">
+          Presiona Enter para agregar rápidamente.
         </p>
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid gap-6 lg:grid-cols-2">
         {/* Unclassified Ideas */}
-        <div className="rounded-xl border border-border bg-card p-5">
+        <div className="rounded-xl border border-border bg-card p-4 md:p-5">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-foreground">
+            <h2 className="text-base font-semibold text-foreground md:text-lg">
               Sin Clasificar ({unclassifiedIdeas.length})
             </h2>
           </div>
-          <div className="space-y-3">
+          <div className="space-y-3 max-h-[50vh] overflow-y-auto md:max-h-[60vh]">
             {unclassifiedIdeas.length > 0 ? (
               unclassifiedIdeas.map((task) => (
                 <div key={task.id} className="space-y-2">
-                  <TaskCard task={task} />
+                  <TaskCard task={task} compact />
                   <Button
                     variant="outline"
                     size="sm"
@@ -126,9 +127,9 @@ export default function BrainstormPage() {
                 </div>
               ))
             ) : (
-              <div className="py-12 text-center">
-                <Lightbulb className="mx-auto h-12 w-12 text-muted-foreground/50" />
-                <p className="mt-4 text-muted-foreground">
+              <div className="py-8 text-center md:py-12">
+                <Lightbulb className="mx-auto h-10 w-10 text-muted-foreground/50 md:h-12 md:w-12" />
+                <p className="mt-4 text-sm text-muted-foreground">
                   No hay ideas sin clasificar
                 </p>
               </div>
@@ -137,21 +138,22 @@ export default function BrainstormPage() {
         </div>
 
         {/* Classified Ideas */}
-        <div className="rounded-xl border border-border bg-card p-5">
+        <div className="rounded-xl border border-border bg-card p-4 md:p-5">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-foreground">
+            <h2 className="text-base font-semibold text-foreground md:text-lg">
               Clasificadas ({classifiedIdeas.length})
             </h2>
             <Button variant="outline" size="sm" onClick={() => setIsCreateOpen(true)}>
               <Plus className="mr-2 h-4 w-4" />
-              Nueva Idea
+              <span className="hidden sm:inline">Nueva Idea</span>
+              <span className="sm:hidden">Nueva</span>
             </Button>
           </div>
-          <div className="space-y-3">
+          <div className="space-y-3 max-h-[50vh] overflow-y-auto md:max-h-[60vh]">
             {classifiedIdeas.length > 0 ? (
               classifiedIdeas.map((task) => (
                 <div key={task.id} className="space-y-2">
-                  <TaskCard task={task} />
+                  <TaskCard task={task} compact />
                   <Button
                     variant="outline"
                     size="sm"
@@ -163,9 +165,9 @@ export default function BrainstormPage() {
                 </div>
               ))
             ) : (
-              <div className="py-12 text-center">
-                <Search className="mx-auto h-12 w-12 text-muted-foreground/50" />
-                <p className="mt-4 text-muted-foreground">
+              <div className="py-8 text-center md:py-12">
+                <Search className="mx-auto h-10 w-10 text-muted-foreground/50 md:h-12 md:w-12" />
+                <p className="mt-4 text-sm text-muted-foreground">
                   Clasifica tus ideas para verlas aquí
                 </p>
               </div>
